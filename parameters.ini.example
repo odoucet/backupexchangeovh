@@ -1,0 +1,20 @@
+; Credential to use OVH API.
+; https://api.ovh.com
+
+application_key    = 
+application_secret = 
+consumer_key       = 
+
+; Maximum age of a backup before redoing a new one (in HOURS)
+max_age_backup = 48
+
+; destination folder of backups. Date will be appended.
+destination_folder = /tmp
+
+; date format (strftime). Will be concatenated to destination_folder
+date_format = %Y%m%d
+
+; how to retrieve backups ?
+; possible values : wget,fopen
+backup_method = wget
+
