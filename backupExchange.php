@@ -20,6 +20,9 @@ define('SLEEPTIME', 30);
 // Script verbosity : 0 for minimal output, 5 for medium, 10 for very verbose
 define('VERBOSITY', 5);
 
+// Shows summary array with files created
+define('PRINT_SUMMARY', 1);
+
 
 require 'OvhApi.php';
 
@@ -348,6 +351,12 @@ while (sleep(SLEEPTIME) === 0) {
         echo "Sleeping ".SLEEPTIME." seconds then retry ... zzzZzzzzZzzz .... \n";
     }
 }
+
+if (PRINT_SUMMARY == 1) {
+    // quick & dirty
+    passthru('cd '.BACKUPDIR.' && find . -type f -ls');
+}
+
 if (VERBOSITY > 0) {
     echo "Finished !\n";
 }
