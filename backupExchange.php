@@ -235,6 +235,12 @@ while (sleep(SLEEPTIME) === 0) {
                         $apiUrl = '/email/exchange/'.$service['org'].'/service/'.$service['service'].'/account/'.$email.'/export';
             $result = $ovhApi->get($apiUrl);
 
+            if ($result === null) {
+                // error retrieving data from API
+                printf("Error retrieving info from API, will try again later\n");
+                continue;
+            }
+
             $filePath = BACKUPDIR.'/'.$service['service'].'/'.$email.'.pst';
 
             if (file_exists($filePath)) {
