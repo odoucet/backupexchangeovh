@@ -237,7 +237,7 @@ while (sleep(SLEEPTIME) === 0) {
 
             if ($result === null) {
                 // error retrieving data from API
-                printf("Error retrieving info from API, will try again later\n");
+                printf("Error retrieving info from API for %s/%s, will try again later\n", $service['service'], $email);
                 continue;
             }
 
