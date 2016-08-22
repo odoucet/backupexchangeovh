@@ -77,6 +77,11 @@ class OvhApi {
             'X-Ovh-Signature:' . $signature,
             'X-Ovh-Timestamp:' . $time,
         ));
+
+        // timeouts
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 300);
+
         if($body)
         {
             curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
