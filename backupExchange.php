@@ -155,7 +155,8 @@ foreach ($servicesList as $id => $service) {
             }
 
             // need to reset to make a new export
-            if ($result->percentComplete == 100 && $hoursAgo > $credentials['max_age_backup']) {
+            // Reset everytime, because if percentComplete != 100, after several hours, it means there is a bug so reset it.
+            if ($hoursAgo > $credentials['max_age_backup']) {
                 if (VERBOSITY > 0) {
                     printf("  Reset export status ... ");
                 }
@@ -237,7 +238,7 @@ while (sleep(SLEEPTIME) === 0) {
 
             if ($result === null) {
                 // error retrieving data from API
-                printf("Error retrieving info from API for %s/%s, will try again later\n", $service['service'], $email);
+                //printf("Error retrieving info from API for %s/%s, will try again later\n", $service['service'], $email);
                 continue;
             }
 
@@ -281,7 +282,7 @@ while (sleep(SLEEPTIME) === 0) {
                             continue;
                         }
                         if (VERBOSITY > 0) {
-                            printf("Downloading to %s URL %s\n", $filePath, $result->url);
+                            printf("Downloading %s to %s (with %s)\n", $result->url, $filePath, $credentials['backup_method']);
                         }
 
                         if (!file_exists(dirname($filePath))) {
@@ -289,15 +290,14 @@ while (sleep(SLEEPTIME) === 0) {
                         }
 
                         if ($credentials['backup_method'] == 'wget') {
-                            passthru('cd '.BACKUPDIR.' && wget -nc --limit-rate=10M -O "'.$filePath.'" -q '.$result->url);
+                            passthru('cd '.BACKUPDIR.' && wget -nc -O "'.$filePath.'" -q '.$result->url);
 
                         } elseif ($credentials['backup_method'] == 'fopen') {
                             $fp = fopen($result->url, 'r');
                             $out= fopen($filePath, 'w');
 
-                            while ($buf = fread($fp, 65536)) {
-                                fwrite($out, $buf);
-                                usleep(500);
+                            while (!feof($fp)) {
+                                fwrite($out, fread($fp, 65536));
                             }
                             fclose($out);
                             fclose($fp);
@@ -353,7 +353,7 @@ while (sleep(SLEEPTIME) === 0) {
 
         }
     }
-    if (VERBOSITY > 0) {
+    if (VERBOSITY > 5) {
         echo "Sleeping ".SLEEPTIME." seconds then retry ... zzzZzzzzZzzz .... \n";
     }
 }
@@ -366,3 +366,4 @@ if (PRINT_SUMMARY == 1) {
 if (VERBOSITY > 0) {
     echo "Finished !\n";
 }
+
