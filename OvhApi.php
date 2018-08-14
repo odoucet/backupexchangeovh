@@ -89,7 +89,7 @@ class OvhApi {
         $result = curl_exec($curl);
         if($result === FALSE)
         {
-            echo curl_error($curl);
+            //echo curl_error($curl);
             return NULL;
         }
 
