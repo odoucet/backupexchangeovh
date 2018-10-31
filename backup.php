@@ -77,7 +77,7 @@ if ($result === null || (is_object($result) && isset($result->message) && preg_m
     $newExportNeeded = true;
 
 } elseif (!is_object($result) || !isset($result->creationDate)) {
-	logError("an error occured when grabing export data.");
+	logError("an error occured when grabing export data.".print_r($result, 1));
 
 } else {
     if ($result->percentComplete == 100) {
@@ -190,7 +190,7 @@ while (sleep(SLEEPTIME) === 0) {
 
             } else {
                 if (VERBOSITY >= 5) {
-                    printf("Export not ready yet (no url given)   \r");
+                    printf("Export not ready yet (no url given).");
                 }
 
                 // sometimes, OVH forgets what we ask for ...
@@ -198,6 +198,9 @@ while (sleep(SLEEPTIME) === 0) {
             }
         } elseif ($backupStatus == 'downloadUrl') {
             if ($credentials['backup_method'] == 'wget') {
+                if (file_exists(BACKUPFILE)) {
+					unlink(BACKUPFILE); // clean it before download
+				}
                 passthru('wget -nc -O "'.BACKUPFILE.'" -q "'.$downloadUrl.'"');
 
             } elseif ($credentials['backup_method'] == 'fopen') {
@@ -213,20 +216,16 @@ while (sleep(SLEEPTIME) === 0) {
 
             // check download OK
             if (!file_exists(BACKUPFILE) || filesize(BACKUPFILE) == 0) {
-                // an error happened, try to reset status
-                $backupStatus = null;
-                $downloadUrl  = null;
-
                 continue; // try again
             }
 
             if (VERBOSITY > 0) {
-                echo "\nBackup Done! ";
+                echo "Backup Done! ";
             }
             die(0);
 
         } else {
-            logError("Case not handled line ".__LINE__);
+            logError("Case not handled for backupStatus=".$backupStatus." line ".__LINE__.': '.print_r($result, 1));
         }
 
     // @todo do not base behaviour on message ...
@@ -247,7 +246,7 @@ while (sleep(SLEEPTIME) === 0) {
         }
 
     } else {
-        logError("Case not handled line ".__LINE__);
+        logError(ACCOUNTSTR.": Case not handled line ".__LINE__.': '.print_r($result, 1));
     }
 
 }
