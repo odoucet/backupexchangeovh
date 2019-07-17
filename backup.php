@@ -245,6 +245,9 @@ while (sleep(SLEEPTIME) === 0) {
             }
         }
 
+    } elseif (isset($result->message) && $result->message == 'Internal server error') {
+        // OVH had an issue ... Do nothing, try again
+
     } else {
         logError(ACCOUNTSTR.": Case not handled line ".__LINE__.': '.print_r($result, 1));
     }
