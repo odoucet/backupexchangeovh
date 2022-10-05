@@ -135,7 +135,8 @@ if ($newExportNeeded) {
         if (isset($result->status)) {
             printf("  New export requested. Status: %s\n", $result->status);
         } else {
-            logError("  Error when requesting new export. Message: %s\n", $result->message);
+            logError(sprintf("  Error when requesting new export. Message: %s\n", $result->message));
+	    die(1);
         }
     }
 }
