@@ -6,6 +6,13 @@ It uses the API provided to backup .pst files.
 
 Please note that this is a heavy process, that's why I recommand doing backup ~ once in a week.
 
+NOT WORKING ANYMORE ON PRIVATE REPOSITORY
+-----------------------------------------
+OVH API, on private repo, now answers with : 
+```
+Error when requesting new export. Message: Creation of exports on private version of exchange is unavailable. Please use feature of impersonatedUser instead.
+```
+
 Usage (CHANGED IN 1.0)
 -----
 There is now two scripts : 
