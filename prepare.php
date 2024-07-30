@@ -88,6 +88,7 @@ file_put_contents($argv[1].'/accounts.txt', implode("\n", $accountList));
  */
 function syntax()
 {
+    global $argv;
     echo "Syntax: ".$argv[0].' <folder>'."\n";
     die(1);
 }
